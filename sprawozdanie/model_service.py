@@ -272,7 +272,7 @@ def get_data(dataset, flatten, enriched, oversampled, shuffled=True, scaled=True
             dataset = flatten_financial_dataset(dataset, object_length_in_rows)
         dataset = dataset.sample(frac=1, random_state=random_state).reset_index(drop=True)
         if not flatten:
-            dataset = deflatten_financial_dataset(flatten_dataset)
+            dataset = deflatten_financial_dataset(dataset)
         
     X_train, y_train, X_test, y_test  = get_train_test_split(dataset.drop('label', axis=1), dataset['label'])
 
