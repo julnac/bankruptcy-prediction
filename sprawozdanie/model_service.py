@@ -240,6 +240,11 @@ def get_train_test_split(X, y):
     X_train = X_train.drop('subset', axis=1)
     X_test = X_test.drop('subset', axis=1)
 
+    X_train = X_train.reset_index(drop=True)
+    X_test = X_test.reset_index(drop=True)
+    y_train = y_train.reset_index(drop=True)
+    y_test = y_test.reset_index(drop=True)
+
     return X_train, y_train, X_test, y_test
 
 

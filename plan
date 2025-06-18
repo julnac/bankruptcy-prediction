@@ -1,0 +1,52 @@
+Scope:
+
+Dataset:
+- simple dataset analysis:
+  - check for missing values - ✅
+  - check for outliers - ⏸️
+  - check for class imbalance - ✅
+- check for feature correlations - ⏸️
+- check for data correctness - ✅
+- extend dataset with domain knowledge (i.e. add derived features) - ❌
+*analyze two datasets: 5-year and 3-year datasets
+
+Model:
+- dataset variants:
+    - flatten
+    - not flatten
+    - original
+    - oversampled
+    - enriched
+    - 3-year dataset
+- find best model with automated model selection (automl, flaml, custom models from scikit-learn)
+- use best model to predict - prediction is used by investment agent to make sell/buy decisions
+
+Investment Agent:
+- get prices from gurufocus
+- use simple Arima model to predict future prices
+
+Application:
+- fetch data for requested companies
+- run inference on the model
+- for bankrupt companies, use Arima model to predict future prices
+- return decision to user from Arima model
+
+
+Ważne uwagi:
+- nie mozna używać kroswalidacji dla niespłaszczonych danych, ponieważ nie ma wtedy pewności, że część obiektu nie trafi losowo do innych podziałów
+- nie uzywamy zbioru walidacyjnego, ponieważ chcemy porówać też modele, które go wykorzystują naturalnie (w przeciwieństwie do klasycznych modeli z pakietu scikit-learn)
+- jak działa pandas?
+
+- wariant zbioru z nadpróbkowanymi danymi daje nadspodziewanie dobre rezultaty, może być to spowodowane niewłaściwym nadpróbkowaniem zbioru danych.
+Dla danych tabelarycznych najpopularniejszą metodą jest SMOTE, ale nadpróbkowanie.
+
+Podczas robienia eksperymentów z nadpróbkowanym zbiorem danych, okazało się, że modele osiągają bardzo różne wyniki w zależności od ziarna dla generatora liczby pseudolosowych.
+ należy tworzyć zbiór treningowy test
+
+ Opisać czemu wybrano precision jako metrykę do porównywania modeli.
+
+ Podczas nadpróbkowania nie uwzględniano zmiany stosunku podzbioru treningowego i testowego (dla przyjętej, domyślnej strategii nadpróbkowania).
+ W wyniku nadpróbkowania, jeśli pierwotnie zakładano 80% zbioru treningowego i 20% testowego, to po nadpróbkowaniu stosunek ten zmienia się na 95% treningowego i 5% testowego.
+
+ Dla modelu XGBClassifier przeprowadzono serię eksperymentów, w czasie których wyszło, że model osiąga bardzo niestabilne wyniki w zależności od ziarna dla generatora liczb pseudolosowych. Zdarzało się, że model osiągał precyzję równą 1, a dla innego ziarna precyzja wynosiła 0.
+ Podczas agregowania wyników z różnych eksperymentów należy uwzględniać, że nawet jeśli dla danego zbioru danych, uśrednione wyniki modelu są lepsze to w praktyce może to oznaczać bardzo zróżnicowane (niestabilne) wyniki i dlatego oznacza gorszą jakość modelu.
